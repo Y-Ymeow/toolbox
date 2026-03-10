@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
+  base: "/toolbox/",
   plugins: [
     preact(),
     tailwindcss(),
@@ -17,10 +18,10 @@ export default defineConfig({
         theme_color: "#0f172a",
         background_color: "#0b1020",
         display: "standalone",
-        start_url: "/",
+        start_url: "/toolbox/",
         icons: [
           {
-            src: "/icon.svg",
+            src: "icon.svg",
             sizes: "any",
             type: "image/svg+xml",
             purpose: "any"
