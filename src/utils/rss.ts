@@ -6,6 +6,7 @@ export type RssItem = {
   pubDate?: string;
   summary?: string;
   content?: string;
+  image?: string;
 };
 
 export type RssState = {
@@ -19,6 +20,11 @@ export type RssState = {
 const stripHtml = (html: string) => {
   const doc = new DOMParser().parseFromString(html, "text/html");
   return doc.body.textContent?.replace(/\s+/g, " ").trim() || "";
+};
+
+const extractFirstImage = (html: string) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  return doc.querySelector("img")?.getAttribute("src") || undefined;
 };
 
 const extractLink = (node: Element | null) => {
@@ -63,21 +69,26 @@ export function useRss(url?: string, reloadKey = 0) {
               item.querySelector("updated")?.textContent?.trim() ||
               item.querySelector("published")?.textContent?.trim() ||
               undefined;
-            const description =
-              item.querySelector("description")?.textContent?.trim() ||
-              item.querySelector("summary")?.textContent?.trim() ||
-              item.querySelector("content")?.textContent?.trim() ||
-              "";
-            return {
-              title,
-              link,
-              pubDate,
-              summary: description
-                ? stripHtml(description).slice(0, 180)
-                : undefined,
-              content: description ? stripHtml(description) : undefined,
-            };
-          }
+          const description =
+            item.querySelector("description")?.textContent?.trim() ||
+            item.querySelector("summary")?.textContent?.trim() ||
+            item.querySelector("content")?.textContent?.trim() ||
+            "";
+          const image =
+            item.querySelector("enclosure")?.getAttribute("url") ||
+            item.querySelector("media\\:content")?.getAttribute("url") ||
+            (description ? extractFirstImage(description) : undefined);
+          return {
+            title,
+            link,
+            pubDate,
+            summary: description
+              ? stripHtml(description).slice(0, 180)
+              : undefined,
+            content: description ? stripHtml(description) : undefined,
+            image,
+          };
+        }
         );
 
         if (!active) return;
