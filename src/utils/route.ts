@@ -9,6 +9,7 @@ export const mapHashToRoute = (hash: string): ToolKey => {
   if (hash.startsWith("#/news")) return "news";
   if (hash.startsWith("#/timer")) return "timer";
   if (hash.startsWith("#/notes")) return "notes";
+  if (hash.startsWith("#/rss")) return "rss";
   return "home";
 };
 
