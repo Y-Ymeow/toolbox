@@ -22,19 +22,28 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
             value={feed.url}
             onChange={(event) => {
               const url = (event.target as HTMLSelectElement).value;
-              const selected = feeds.find((item) => item.url === url) || feeds[0];
+              const selected =
+                feeds.find((item) => item.url === url) || feeds[0];
               onChange(selected);
             }}
             className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-emerald-400"
           >
             {feeds.map((feed) => (
-              <option key={feed.url} value={feed.url} className="text-slate-900">
+              <option
+                key={feed.url}
+                value={feed.url}
+                className="text-slate-900"
+              >
                 {feed.label}
               </option>
             ))}
           </select>
           <span className="text-xs text-slate-400">
-            {feed.type === "rss" ? "RSS 解析" : feed.type === "image" ? "直连图片" : "直连 JSON"}
+            {feed.type === "rss"
+              ? "RSS 解析"
+              : feed.type === "image"
+                ? "直连图片"
+                : "直连 JSON"}
           </span>
           <span className="text-xs text-slate-500">数据来源：公开平台</span>
         </div>
@@ -48,7 +57,7 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
               {news.items.map((item) => (
                 <article
                   key={`${item.link || item.title}`}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-4"
+                  className="rounded-2xl border border-white/10 bg-white/5"
                 >
                   {item.link ? (
                     <a
@@ -60,10 +69,18 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
                       {item.title}
                     </a>
                   ) : (
-                    <span className="text-base font-semibold text-white">{item.title}</span>
+                    <span className="text-base font-semibold text-white">
+                      {item.title}
+                    </span>
                   )}
-                  <p className="mt-2 text-xs text-slate-400">{item.pubDate ?? ""}</p>
-                  {item.summary ? <p className="mt-2 text-sm text-slate-300">{item.summary}</p> : null}
+                  <p className="mt-2 text-xs text-slate-400">
+                    {item.pubDate ?? ""}
+                  </p>
+                  {item.summary ? (
+                    <p className="mt-2 text-sm text-slate-300">
+                      {item.summary}
+                    </p>
+                  ) : null}
                   {item.image ? (
                     <img
                       src={item.image}
