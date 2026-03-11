@@ -4,7 +4,7 @@ import type { NewsState } from "../../utils/news";
 export const newsCard: ToolCard = {
   key: "news",
   name: "新闻源",
-  desc: "国内资讯聚合与摘要",
+  desc: "图片 / RSS / 热榜直连",
   status: "滚动",
   accent: "from-emerald-400/30 via-emerald-400/10 to-transparent"
 };

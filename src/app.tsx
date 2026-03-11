@@ -17,15 +17,12 @@ import { fxCard, buildFxBoard } from "./tools/fx/data";
 import { FxPage } from "./tools/fx/detail";
 import { newsCard, buildNewsBoard } from "./tools/news/data";
 import { NewsPage } from "./tools/news/detail";
-import { timerCard, timerBoard } from "./tools/timer/data";
+import { timerCard, buildTimerBoard } from "./tools/timer/data";
 import { TimerPage } from "./tools/timer/detail";
-
-const actions = [
-  { label: "快速算式", meta: "科学计算" },
-  { label: "汇率提醒", meta: "设定阈值" },
-  { label: "天气订阅", meta: "多城播报" },
-  { label: "新闻看板", meta: "滚动追踪" }
-];
+import type { TimerItem } from "./tools/timer/types";
+import { notesCard, buildNotesBoard } from "./tools/notes/data";
+import { NotesPage } from "./tools/notes/detail";
+import type { NoteItem } from "./tools/notes/types";
 
 type HomeBoard = {
   key: ToolCard["key"];
@@ -63,7 +60,9 @@ function AppShell({
               </div>
               <div className="flex items-center justify-between gap-8">
                 <span>当前时间</span>
-                <span className="font-semibold text-slate-100">{formatDateTime(now)}</span>
+                <span className="text-base font-semibold text-slate-100 md:text-lg">
+                  {formatDateTime(now)}
+                </span>
               </div>
               <div className="flex items-center justify-between gap-8">
                 <span>实时通道</span>
@@ -86,17 +85,6 @@ function AppShell({
               </a>
             </div>
           ) : null}
-          <div className="grid gap-3 md:grid-cols-4">
-            {actions.map((action) => (
-              <button
-                key={action.label}
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left transition hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10"
-              >
-                <div className="text-sm font-semibold text-white">{action.label}</div>
-                <div className="mt-1 text-xs text-slate-400">{action.meta}</div>
-              </button>
-            ))}
-          </div>
         </div>
       </header>
       <main className="px-6 pb-16 pt-12 md:px-12">{children}</main>
@@ -187,6 +175,8 @@ export function App() {
   const [expression, setExpression] = useLocalStorageState("toolbox.calcExpression", "sin(pi/4)+2^3");
   const [calcResult, setCalcResult] = useState("--");
   const [calcError, setCalcError] = useState<string | undefined>(undefined);
+  const [timers, setTimers] = useLocalStorageState<TimerItem[]>("toolbox.timers", []);
+  const [notes, setNotes] = useLocalStorageState<NoteItem[]>("toolbox.notes", []);
 
   const weather = useWeather(city);
   const fx = useFx(fxBase, fxTarget, fxAmount);
@@ -194,15 +184,16 @@ export function App() {
     const matched = newsFeeds.find((item) => item.url === newsFeed.url);
     return matched ?? newsFeeds[0];
   }, [newsFeed]);
-  const news = useNews(resolvedNewsFeed.url, resolvedNewsFeed.label);
+  const news = useNews(resolvedNewsFeed);
 
-  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard];
+  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard, notesCard];
   const boards: HomeBoard[] = [
     { key: "calc", data: buildCalcBoard(expression, calcResult) },
     { key: "weather", data: buildWeatherBoard(weather) },
     { key: "fx", data: buildFxBoard(fx) },
     { key: "news", data: buildNewsBoard(news) },
-    { key: "timer", data: timerBoard }
+    { key: "timer", data: buildTimerBoard(timers, now) },
+    { key: "notes", data: buildNotesBoard(notes) }
   ];
 
   const page = useMemo(() => {
@@ -255,13 +246,15 @@ export function App() {
         return (
           <NewsPage
             news={news}
-            feedUrl={resolvedNewsFeed.url}
+            feed={resolvedNewsFeed}
             feeds={newsFeeds}
-            onChange={(next) => setNewsFeed({ label: next.feedName, url: next.feedUrl })}
+            onChange={(next) => setNewsFeed(next)}
           />
         );
       case "timer":
-        return <TimerPage />;
+        return <TimerPage timers={timers} onChange={setTimers} />;
+      case "notes":
+        return <NotesPage notes={notes} onChange={setNotes} />;
       default:
         return <HomePage toolCards={toolCards} boards={boards} />;
     }
@@ -278,6 +271,9 @@ export function App() {
     fxAmount,
     news,
     resolvedNewsFeed,
+    timers,
+    notes,
+    now,
     toolCards,
     boards
   ]);
