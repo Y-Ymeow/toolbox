@@ -223,14 +223,27 @@ export function RssPage({
                 <p className="mt-2 text-xs text-slate-400">
                   {selectedItem.pubDate || ""}
                 </p>
-                {selectedItem.image ? (
-                  <img
-                    src={selectedItem.image}
-                    alt=""
-                    loading="lazy"
-                    className="mt-4 w-full rounded-2xl border border-white/10 object-cover"
-                  />
-                ) : null}
+              {selectedItem.image ? (
+                <img
+                  src={selectedItem.image}
+                  alt=""
+                  loading="lazy"
+                  className="mt-4 w-full rounded-2xl border border-white/10 object-cover"
+                />
+              ) : null}
+              {selectedItem.images && selectedItem.images.length > 1 ? (
+                <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {selectedItem.images.slice(1, 5).map((img) => (
+                    <img
+                      key={img}
+                      src={img}
+                      alt=""
+                      loading="lazy"
+                      className="w-full rounded-2xl border border-white/10 object-cover"
+                    />
+                  ))}
+                </div>
+              ) : null}
                 {selectedItem.content ? (
                   <p className="mt-4 text-sm leading-relaxed text-slate-200">
                     {selectedItem.content}

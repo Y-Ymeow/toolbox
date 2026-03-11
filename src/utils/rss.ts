@@ -7,6 +7,7 @@ export type RssItem = {
   summary?: string;
   content?: string;
   image?: string;
+  images?: string[];
 };
 
 export type RssState = {
@@ -24,7 +25,34 @@ const stripHtml = (html: string) => {
 
 const extractFirstImage = (html: string) => {
   const doc = new DOMParser().parseFromString(html, "text/html");
-  return doc.querySelector("img")?.getAttribute("src") || undefined;
+  const img = doc.querySelector("img");
+  if (!img) return undefined;
+  return (
+    img.getAttribute("src") ||
+    img.getAttribute("data-src") ||
+    img.getAttribute("data-original") ||
+    img.getAttribute("data-lazy-src") ||
+    img.getAttribute("data-actualsrc") ||
+    undefined
+  );
+};
+
+const extractImages = (html: string) => {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const nodes = Array.from(doc.querySelectorAll("img"));
+  const images = nodes
+    .map(
+      (img) =>
+        img.getAttribute("src") ||
+        img.getAttribute("data-src") ||
+        img.getAttribute("data-original") ||
+        img.getAttribute("data-lazy-src") ||
+        img.getAttribute("data-actualsrc") ||
+        ""
+    )
+    .map((value) => value.trim())
+    .filter(Boolean);
+  return images.length > 0 ? images : undefined;
 };
 
 const extractLink = (node: Element | null) => {
@@ -74,9 +102,11 @@ export function useRss(url?: string, reloadKey = 0) {
             item.querySelector("summary")?.textContent?.trim() ||
             item.querySelector("content")?.textContent?.trim() ||
             "";
+          const images = description ? extractImages(description) : undefined;
           const image =
             item.querySelector("enclosure")?.getAttribute("url") ||
             item.querySelector("media\\:content")?.getAttribute("url") ||
+            images?.[0] ||
             (description ? extractFirstImage(description) : undefined);
           return {
             title,
@@ -87,6 +117,7 @@ export function useRss(url?: string, reloadKey = 0) {
               : undefined,
             content: description ? stripHtml(description) : undefined,
             image,
+            images,
           };
         }
         );
