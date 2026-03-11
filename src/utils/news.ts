@@ -24,11 +24,31 @@ export type NewsState = {
 };
 
 export const newsFeeds: NewsFeed[] = [
-  { label: "60s 热点图", url: "https://zj.v.api.aa1.cn/api/60s/", type: "image" },
-  { label: "喷嚏图卦 (RSS)", url: "https://plink.anyfeeder.com/pentitugua", type: "rss" },
-  { label: "全网热点 · 百度", url: "https://v.api.aa1.cn/api/topbaidu/", type: "json" },
-  { label: "热榜 · 综合", url: "https://api.vvhan.com/api/hotlist/all", type: "json" },
-  { label: "微博热搜", url: "https://api.vvhan.com/api/hotlist/wbHot", type: "json" }
+  {
+    label: "60s 热点图",
+    url: "https://zj.v.api.aa1.cn/api/60s/",
+    type: "image",
+  },
+  {
+    label: "喷嚏图卦 (RSS)",
+    url: "https://plink.anyfeeder.com/pentitugua",
+    type: "rss",
+  },
+  {
+    label: "全网热点 · 百度",
+    url: "https://v.api.aa1.cn/api/topbaidu/",
+    type: "json",
+  },
+  {
+    label: "热榜 · 综合",
+    url: "https://api.vvhan.com/api/hotlist/all",
+    type: "json",
+  },
+  {
+    label: "微博热搜",
+    url: "https://api.vvhan.com/api/hotlist/wbHot",
+    type: "json",
+  },
 ];
 
 type RawHotItem = {
@@ -65,14 +85,19 @@ export function useNews(feed: NewsFeed) {
     loading: true,
     feedName: feed.label,
     feedType: feed.type,
-    items: []
+    items: [],
   });
 
   useEffect(() => {
     let active = true;
     let objectUrl: string | undefined;
     const load = async () => {
-      setState({ loading: true, feedName: feed.label, feedType: feed.type, items: [] });
+      setState({
+        loading: true,
+        feedName: feed.label,
+        feedType: feed.type,
+        items: [],
+      });
       try {
         const resp = await fetch(feed.url);
         if (!resp.ok) throw new Error("新闻源获取失败");
@@ -85,43 +110,62 @@ export function useNews(feed: NewsFeed) {
             {
               title: feed.label,
               link: feed.url,
-              image: objectUrl
-            }
+              image: objectUrl,
+            },
           ];
         } else if (feed.type === "rss") {
           const text = await resp.text();
+          console.log(resp, resp.text());
           const xml = new DOMParser().parseFromString(text, "text/xml");
-          const items = Array.from(xml.querySelectorAll("item")).slice(0, 10);
+          const items = Array.from(xml.querySelectorAll("item"));
           parsed = items.map((item) => {
-            const title = item.querySelector("title")?.textContent?.trim() || "(无标题)";
+            const title =
+              item.querySelector("title")?.textContent?.trim() || "(无标题)";
             const link = item.querySelector("link")?.textContent?.trim() || "";
-            const pubDate = item.querySelector("pubDate")?.textContent?.trim() || undefined;
-            const description = item.querySelector("description")?.textContent?.trim() || "";
+            const pubDate =
+              item.querySelector("pubDate")?.textContent?.trim() || undefined;
+            const description =
+              item.querySelector("description")?.textContent?.trim() || "";
             return {
               title,
               link,
               pubDate,
-              summary: description ? stripHtml(description).slice(0, 160) : undefined,
-              image: description ? extractFirstImage(description) : undefined
+              summary: description
+                ? stripHtml(description).slice(0, 200)
+                : undefined,
+              image: description ? extractFirstImage(description) : undefined,
             };
           });
         } else {
           const payload = await resp.json();
           const data = payload?.data;
-          const list = (Array.isArray(data) ? data : Array.isArray(data?.list) ? data.list : []) as RawHotItem[];
+          const list = (
+            Array.isArray(data)
+              ? data
+              : Array.isArray(data?.list)
+                ? data.list
+                : []
+          ) as RawHotItem[];
           const altList = (payload?.newslist ?? []) as RawTopBaiduItem[];
           parsed =
             list.length > 0
               ? list.slice(0, 12).map((item) => ({
                   title: item.title || item.name || "(无标题)",
-                  link: item.url || item.link || item.mobileUrl || item.mobilUrl || "",
+                  link:
+                    item.url ||
+                    item.link ||
+                    item.mobileUrl ||
+                    item.mobilUrl ||
+                    "",
                   pubDate: item.time,
-                  summary: item.hot ? `热度：${item.hot}` : undefined
+                  summary: item.hot ? `热度：${item.hot}` : undefined,
                 }))
               : altList.slice(0, 12).map((item) => ({
                   title: item.title || "(无标题)",
                   link: item.url || "",
-                  summary: item.digest || (item.hotnum ? `热度：${item.hotnum}` : undefined)
+                  summary:
+                    item.digest ||
+                    (item.hotnum ? `热度：${item.hotnum}` : undefined),
                 }));
         }
 
@@ -131,7 +175,7 @@ export function useNews(feed: NewsFeed) {
           feedName: feed.label,
           feedType: feed.type,
           items: parsed,
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         });
       } catch (error) {
         if (!active) return;
@@ -140,7 +184,7 @@ export function useNews(feed: NewsFeed) {
           feedName: feed.label,
           feedType: feed.type,
           items: [],
-          error: error instanceof Error ? error.message : "未知错误"
+          error: error instanceof Error ? error.message : "未知错误",
         });
       }
     };
