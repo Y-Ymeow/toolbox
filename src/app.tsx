@@ -23,6 +23,9 @@ import type { TimerItem } from "./tools/timer/types";
 import { notesCard, buildNotesBoard } from "./tools/notes/data";
 import { NotesPage } from "./tools/notes/detail";
 import type { NoteItem } from "./tools/notes/types";
+import { rssCard, buildRssBoard } from "./tools/rss/data";
+import { RssPage } from "./tools/rss/detail";
+import type { RssFeed } from "./tools/rss/types";
 
 type HomeBoard = {
   key: ToolCard["key"];
@@ -177,6 +180,8 @@ export function App() {
   const [calcError, setCalcError] = useState<string | undefined>(undefined);
   const [timers, setTimers] = useLocalStorageState<TimerItem[]>("toolbox.timers", []);
   const [notes, setNotes] = useLocalStorageState<NoteItem[]>("toolbox.notes", []);
+  const [rssFeeds, setRssFeeds] = useLocalStorageState<RssFeed[]>("toolbox.rssFeeds", []);
+  const [rssSelected, setRssSelected] = useLocalStorageState<string>("toolbox.rssSelected", "");
 
   const weather = useWeather(city);
   const fx = useFx(fxBase, fxTarget, fxAmount);
@@ -186,14 +191,15 @@ export function App() {
   }, [newsFeed]);
   const news = useNews(resolvedNewsFeed);
 
-  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard, notesCard];
+  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard, notesCard, rssCard];
   const boards: HomeBoard[] = [
     { key: "calc", data: buildCalcBoard(expression, calcResult) },
     { key: "weather", data: buildWeatherBoard(weather) },
     { key: "fx", data: buildFxBoard(fx) },
     { key: "news", data: buildNewsBoard(news) },
     { key: "timer", data: buildTimerBoard(timers, now) },
-    { key: "notes", data: buildNotesBoard(notes) }
+    { key: "notes", data: buildNotesBoard(notes) },
+    { key: "rss", data: buildRssBoard(rssFeeds, rssFeeds.find((feed) => feed.id === rssSelected)) }
   ];
 
   const page = useMemo(() => {
@@ -255,6 +261,15 @@ export function App() {
         return <TimerPage timers={timers} onChange={setTimers} />;
       case "notes":
         return <NotesPage notes={notes} onChange={setNotes} />;
+      case "rss":
+        return (
+          <RssPage
+            feeds={rssFeeds}
+            selectedId={rssSelected}
+            onFeedsChange={setRssFeeds}
+            onSelect={(id) => setRssSelected(id ?? "")}
+          />
+        );
       default:
         return <HomePage toolCards={toolCards} boards={boards} />;
     }
@@ -273,6 +288,8 @@ export function App() {
     resolvedNewsFeed,
     timers,
     notes,
+    rssFeeds,
+    rssSelected,
     now,
     toolCards,
     boards
