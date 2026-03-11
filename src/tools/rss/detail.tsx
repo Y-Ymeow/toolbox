@@ -49,14 +49,14 @@ export function RssPage({
 
   useEffect(() => {
     if (!selected && feeds.length > 0) onSelect(feeds[0].id);
-    setSelectedItemKey(null);
-  }, [selected, feeds, onSelect]);
+  }, [selected?.id, feeds.length]);
 
   useEffect(() => {
     if (!selectedItemKey) return;
     if (!itemKeys.includes(selectedItemKey)) setSelectedItemKey(null);
   }, [itemKeys, selectedItemKey]);
   useEffect(() => {
+    setSelectedItemKey(null);
     setPageSize(8);
   }, [selected?.id]);
 
