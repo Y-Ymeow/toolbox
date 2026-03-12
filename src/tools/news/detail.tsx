@@ -10,7 +10,7 @@ type NewsPageProps = {
 export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
   return (
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">新闻源详情</h2>
           <a href="#/" className="text-sm text-slate-300 hover:text-white">
@@ -47,7 +47,7 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
           </span>
           <span className="text-xs text-slate-500">数据来源：公开平台</span>
         </div>
-        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-2">
+        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-4">
           {news.loading ? (
             <p className="text-sm text-slate-300">加载中...</p>
           ) : news.error ? (
@@ -95,7 +95,7 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
           )}
         </div>
       </div>
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <h3 className="text-lg font-semibold text-white">提示</h3>
         <ul className="mt-4 space-y-3 text-sm text-slate-300">
           <li>已支持图片源、RSS 和 JSON 热榜三类格式。</li>

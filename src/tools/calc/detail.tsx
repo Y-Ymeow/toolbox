@@ -11,7 +11,7 @@ export function CalcPage({
   result,
   error,
   onExpressionChange,
-  onCompute
+  onCompute,
 }: CalcPageProps) {
   const helpers = [
     "sin(pi/4)",
@@ -21,7 +21,7 @@ export function CalcPage({
     "pow(2,10)",
     "log(1000)",
     "ln(2.71828)",
-    "abs(-12.5)"
+    "abs(-12.5)",
   ];
 
   const keypad = [
@@ -31,7 +31,7 @@ export function CalcPage({
     ["0", ".", "(", ")", "+"],
     ["pi", "e", "^", "sqrt(", "log("],
     ["ln(", "pow(", "abs(", "C", "⌫"],
-    ["="]
+    ["="],
   ];
 
   return (
@@ -46,7 +46,9 @@ export function CalcPage({
         <div className="mt-4 rounded-3xl border border-white/10 bg-slate-950/60 p-4">
           <input
             value={expression}
-            onInput={(event) => onExpressionChange((event.target as HTMLInputElement).value)}
+            onInput={(event) =>
+              onExpressionChange((event.target as HTMLInputElement).value)
+            }
             className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-base text-slate-100 outline-none focus:border-violet-400"
             placeholder="输入表达式，例如 sin(pi/4)+2^3"
           />
@@ -68,7 +70,9 @@ export function CalcPage({
             >
               计算
             </button>
-            <span className="text-xs text-slate-400">支持 sin / cos / tan / log / ln / sqrt / pow / pi / e</span>
+            <span className="text-xs text-slate-400">
+              支持 sin / cos / tan / log / ln / sqrt / pow / pi / e
+            </span>
           </div>
         </div>
         <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-6">
@@ -76,13 +80,17 @@ export function CalcPage({
             <p className="text-sm text-rose-300">{error}</p>
           ) : (
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">计算结果</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                计算结果
+              </p>
               <p className="mt-3 text-3xl font-semibold text-white">{result}</p>
             </div>
           )}
         </div>
         <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-6">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">快捷键盘</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+            快捷键盘
+          </p>
           <div className="mt-4 grid gap-2">
             {keypad.map((row, rowIndex) => (
               <div key={`row-${rowIndex}`} className="grid grid-cols-5 gap-2">

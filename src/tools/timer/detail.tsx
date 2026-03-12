@@ -25,7 +25,8 @@ const formatClock = (totalSec: number) => {
 };
 
 const computeElapsed = (item: TimerItem, nowMs: number) =>
-  item.baseElapsedSec + (item.running && item.startedAt ? (nowMs - item.startedAt) / 1000 : 0);
+  item.baseElapsedSec +
+  (item.running && item.startedAt ? (nowMs - item.startedAt) / 1000 : 0);
 
 export function TimerPage({ timers, onChange }: TimerPageProps) {
   const now = useNow(1000);
@@ -46,7 +47,7 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
         running: false,
         baseElapsedSec: item.durationSec,
         startedAt: undefined,
-        updatedAt: timestamp
+        updatedAt: timestamp,
       };
     });
     const changed = updated.some((item, index) => item !== timers[index]);
@@ -69,7 +70,7 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
       running: false,
       startedAt: undefined,
       createdAt: timestamp,
-      updatedAt: timestamp
+      updatedAt: timestamp,
     };
     onChange([next, ...timers]);
     setName("");
@@ -82,13 +83,15 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
   const startTimer = (item: TimerItem) => {
     const timestamp = new Date().toISOString();
     const baseElapsedSec =
-      item.mode === "countdown" && item.baseElapsedSec >= item.durationSec ? 0 : item.baseElapsedSec;
+      item.mode === "countdown" && item.baseElapsedSec >= item.durationSec
+        ? 0
+        : item.baseElapsedSec;
     updateTimer(item.id, () => ({
       ...item,
       baseElapsedSec,
       running: true,
       startedAt: nowMs,
-      updatedAt: timestamp
+      updatedAt: timestamp,
     }));
   };
 
@@ -99,7 +102,7 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
       baseElapsedSec: elapsed,
       running: false,
       startedAt: undefined,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }));
   };
 
@@ -109,7 +112,7 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
       baseElapsedSec: 0,
       running: false,
       startedAt: undefined,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     }));
   };
 
@@ -142,11 +145,18 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
           ) : (
             timers.map((item) => {
               const elapsed = computeElapsed(item, nowMs);
-              const remaining = item.mode === "countdown" ? item.durationSec - elapsed : elapsed;
-              const display = item.mode === "countdown" ? Math.max(0, remaining) : remaining;
+              const remaining =
+                item.mode === "countdown"
+                  ? item.durationSec - elapsed
+                  : elapsed;
+              const display =
+                item.mode === "countdown" ? Math.max(0, remaining) : remaining;
               const done = item.mode === "countdown" && remaining <= 0;
               return (
-                <div key={item.id} className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+                <div
+                  key={item.id}
+                  className="rounded-2xl border border-white/10 bg-slate-950/60 p-4"
+                >
                   <div className="flex items-center justify-between gap-3">
                     <input
                       value={item.name}
@@ -155,7 +165,7 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
                         updateTimer(item.id, () => ({
                           ...item,
                           name: value,
-                          updatedAt: new Date().toISOString()
+                          updatedAt: new Date().toISOString(),
                         }));
                       }}
                       className="min-w-0 flex-1 bg-transparent text-base font-semibold text-white outline-none"
@@ -166,13 +176,17 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
                   </div>
                   <div className="mt-3 flex items-end justify-between">
                     <div>
-                      <div className="text-3xl font-semibold text-white">{formatClock(display)}</div>
+                      <div className="text-3xl font-semibold text-white">
+                        {formatClock(display)}
+                      </div>
                       <div className="text-xs text-slate-400">
                         {item.mode === "countdown" ? "剩余" : "已用"}
                         {done ? " · 已完成" : ""}
                       </div>
                     </div>
-                    <div className="text-xs text-slate-400">更新：{formatDateTime(new Date(item.updatedAt))}</div>
+                    <div className="text-xs text-slate-400">
+                      更新：{formatDateTime(new Date(item.updatedAt))}
+                    </div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {item.running ? (
@@ -214,13 +228,17 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
         <div className="mt-4 space-y-3">
           <input
             value={name}
-            onInput={(event) => setName((event.target as HTMLInputElement).value)}
+            onInput={(event) =>
+              setName((event.target as HTMLInputElement).value)
+            }
             placeholder="计时名称"
             className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-fuchsia-300"
           />
           <select
             value={mode}
-            onChange={(event) => setMode((event.target as HTMLSelectElement).value as TimerMode)}
+            onChange={(event) =>
+              setMode((event.target as HTMLSelectElement).value as TimerMode)
+            }
             className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-fuchsia-300"
           >
             <option value="countdown" className="text-slate-900">
@@ -236,7 +254,9 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
                 type="number"
                 min={0}
                 value={minutes}
-                onInput={(event) => setMinutes((event.target as HTMLInputElement).value)}
+                onInput={(event) =>
+                  setMinutes((event.target as HTMLInputElement).value)
+                }
                 placeholder="分钟"
                 className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-fuchsia-300"
               />
@@ -244,7 +264,9 @@ export function TimerPage({ timers, onChange }: TimerPageProps) {
                 type="number"
                 min={0}
                 value={seconds}
-                onInput={(event) => setSeconds((event.target as HTMLInputElement).value)}
+                onInput={(event) =>
+                  setSeconds((event.target as HTMLInputElement).value)
+                }
                 placeholder="秒"
                 className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-fuchsia-300"
               />

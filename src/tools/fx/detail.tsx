@@ -14,7 +14,7 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
 
   return (
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">汇率详情</h2>
           <a href="#/" className="text-sm text-slate-300 hover:text-white">
@@ -54,7 +54,7 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
             placeholder="金额"
           />
         </div>
-        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-2">
+        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-4">
           {fx.loading ? (
             <p className="text-sm text-slate-300">加载中...</p>
           ) : fx.error ? (
@@ -80,7 +80,7 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
           )}
         </div>
       </div>
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
         <h3 className="text-lg font-semibold text-white">提示</h3>
         <ul className="mt-4 space-y-3 text-sm text-slate-300">
           <li>汇率数据来自 Frankfurter API（基于欧洲央行）。</li>

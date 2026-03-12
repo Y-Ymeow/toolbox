@@ -223,27 +223,27 @@ export function RssPage({
                 <p className="mt-2 text-xs text-slate-400">
                   {selectedItem.pubDate || ""}
                 </p>
-              {selectedItem.image ? (
-                <img
-                  src={selectedItem.image}
-                  alt=""
-                  loading="lazy"
-                  className="mt-4 w-full rounded-2xl border border-white/10 object-cover"
-                />
-              ) : null}
-              {selectedItem.images && selectedItem.images.length > 1 ? (
-                <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                  {selectedItem.images.slice(1, 5).map((img) => (
-                    <img
-                      key={img}
-                      src={img}
-                      alt=""
-                      loading="lazy"
-                      className="w-full rounded-2xl border border-white/10 object-cover"
-                    />
-                  ))}
-                </div>
-              ) : null}
+                {selectedItem.image ? (
+                  <img
+                    src={selectedItem.image}
+                    alt=""
+                    loading="lazy"
+                    className="mt-4 w-full rounded-2xl border border-white/10 object-cover"
+                  />
+                ) : null}
+                {selectedItem.images && selectedItem.images.length > 1 ? (
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    {selectedItem.images.slice(1, 5).map((img) => (
+                      <img
+                        key={img}
+                        src={img}
+                        alt=""
+                        loading="lazy"
+                        className="w-full rounded-2xl border border-white/10 object-cover"
+                      />
+                    ))}
+                  </div>
+                ) : null}
                 {selectedItem.content ? (
                   <p className="mt-4 text-sm leading-relaxed text-slate-200">
                     {selectedItem.content}
@@ -265,22 +265,22 @@ export function RssPage({
                       key={key}
                       className="rounded-2xl border border-white/10 bg-white/5 p-4"
                     >
-                    <div className="flex min-w-0 items-start justify-between gap-3">
-                      <div className="min-w-0">
-                        <h4 className="text-base font-semibold text-white">
-                          {item.title}
-                        </h4>
-                        <p className="mt-2 text-xs text-slate-400">
-                          {item.pubDate || ""}
-                        </p>
+                      <div className="flex min-w-0 items-start justify-between gap-3">
+                        <div className="min-w-0">
+                          <h4 className="text-base font-semibold text-white">
+                            {item.title}
+                          </h4>
+                          <p className="mt-2 text-xs text-slate-400">
+                            {item.pubDate || ""}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setSelectedItemKey(key)}
+                          className="shrink-0 whitespace-nowrap rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-400/20"
+                        >
+                          查看详情
+                        </button>
                       </div>
-                      <button
-                        onClick={() => setSelectedItemKey(key)}
-                        className="shrink-0 whitespace-nowrap rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-200 hover:bg-amber-400/20"
-                      >
-                        查看详情
-                      </button>
-                    </div>
                       {item.image ? (
                         <img
                           src={item.image}
