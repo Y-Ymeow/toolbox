@@ -57,7 +57,7 @@ export function NewsPage({ news, feed, feeds, onChange }: NewsPageProps) {
               {news.items.map((item) => (
                 <article
                   key={`${item.link || item.title}`}
-                  className="rounded-2xl border border-white/10 bg-white/5"
+                  className="rounded-2xl border border-white/10 bg-white/5 p-3"
                 >
                   {item.link ? (
                     <a
