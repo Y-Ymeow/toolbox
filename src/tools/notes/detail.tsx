@@ -18,7 +18,7 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
 
   const sortedNotes = useMemo(
     () => [...notes].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)),
-    [notes]
+    [notes],
   );
 
   const addNote = () => {
@@ -29,7 +29,7 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
       title: title.trim() || "未命名便签",
       content: content.trim(),
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
     };
     onChange([next, ...notes]);
     setTitle("");
@@ -46,7 +46,7 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
 
   return (
     <section className="grid gap-6 lg:grid-cols-[1.4fr_0.6fr]">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">便签墙</h2>
           <a href="#/" className="text-sm text-slate-300 hover:text-white">
@@ -55,12 +55,15 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           {sortedNotes.length === 0 ? (
-            <div className="col-span-full rounded-2xl border border-dashed border-white/10 bg-white/5 p-6 text-sm text-slate-300">
+            <div className="col-span-full rounded-2xl border border-dashed border-white/10 bg-white/5 p-2 text-sm text-slate-300">
               还没有便签，右侧可以新建。
             </div>
           ) : (
             sortedNotes.map((note) => (
-              <div key={note.id} className="rounded-2xl border border-white/10 bg-slate-950/60 p-4">
+              <div
+                key={note.id}
+                className="rounded-2xl border border-white/10 bg-slate-950/60 p-4"
+              >
                 <input
                   value={note.title}
                   onInput={(event) => {
@@ -68,7 +71,7 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
                     updateNote(note.id, (current) => ({
                       ...current,
                       title: value,
-                      updatedAt: new Date().toISOString()
+                      updatedAt: new Date().toISOString(),
                     }));
                   }}
                   className="w-full bg-transparent text-base font-semibold text-white outline-none"
@@ -80,7 +83,7 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
                     updateNote(note.id, (current) => ({
                       ...current,
                       content: value,
-                      updatedAt: new Date().toISOString()
+                      updatedAt: new Date().toISOString(),
                     }));
                   }}
                   rows={4}
@@ -100,18 +103,22 @@ export function NotesPage({ notes, onChange }: NotesPageProps) {
           )}
         </div>
       </div>
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <h3 className="text-lg font-semibold text-white">新建便签</h3>
         <div className="mt-4 space-y-3">
           <input
             value={title}
-            onInput={(event) => setTitle((event.target as HTMLInputElement).value)}
+            onInput={(event) =>
+              setTitle((event.target as HTMLInputElement).value)
+            }
             placeholder="标题"
             className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-sky-300"
           />
           <textarea
             value={content}
-            onInput={(event) => setContent((event.target as HTMLTextAreaElement).value)}
+            onInput={(event) =>
+              setContent((event.target as HTMLTextAreaElement).value)
+            }
             placeholder="记录内容"
             rows={6}
             className="w-full resize-none rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-sky-300"

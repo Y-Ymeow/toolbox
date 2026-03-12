@@ -11,7 +11,7 @@ type WeatherPageProps = {
 export function WeatherPage({ city, weather, onCityChange }: WeatherPageProps) {
   return (
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">天气详情</h2>
           <a href="#/" className="text-sm text-slate-300 hover:text-white">
@@ -21,13 +21,15 @@ export function WeatherPage({ city, weather, onCityChange }: WeatherPageProps) {
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <input
             value={city}
-            onInput={(event) => onCityChange((event.target as HTMLInputElement).value)}
+            onInput={(event) =>
+              onCityChange((event.target as HTMLInputElement).value)
+            }
             placeholder="输入城市，例如 上海"
             className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-sky-400 md:w-64"
           />
           <span className="text-xs text-slate-400">回车或切换城市自动刷新</span>
         </div>
-        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-2">
           {weather.loading ? (
             <p className="text-sm text-slate-300">加载中...</p>
           ) : weather.error ? (
@@ -40,9 +42,8 @@ export function WeatherPage({ city, weather, onCityChange }: WeatherPageProps) {
                   {weather.city} {weather.country ? `· ${weather.country}` : ""}
                 </p>
                 <p className="mt-2 text-sm text-slate-300">
-                  {weatherCodeText[weather.weatherCode ?? -1] ?? "--"} · 体感 {formatNumber(
-                    weather.apparent
-                  )}
+                  {weatherCodeText[weather.weatherCode ?? -1] ?? "--"} · 体感{" "}
+                  {formatNumber(weather.apparent)}
                   °C
                 </p>
               </div>
@@ -76,7 +77,7 @@ export function WeatherPage({ city, weather, onCityChange }: WeatherPageProps) {
           )}
         </div>
       </div>
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <h3 className="text-lg font-semibold text-white">提示</h3>
         <ul className="mt-4 space-y-3 text-sm text-slate-300">
           <li>天气数据来自 Open-Meteo，支持全球城市检索。</li>

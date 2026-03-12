@@ -1,0 +1,1 @@
+{"name":"Toolbox PWA","short_name":"Toolbox","start_url":"/toolbox/","display":"standalone","background_color":"#0b1020","lang":"en","scope":"/toolbox/","description":"A toolbox of practical utilities with live data boards.","theme_color":"#0f172a","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any"}]}

@@ -14,7 +14,7 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
 
   return (
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-white">汇率详情</h2>
           <a href="#/" className="text-sm text-slate-300 hover:text-white">
@@ -24,14 +24,20 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <input
             value={base}
-            onInput={(event) => onChange({ base: (event.target as HTMLInputElement).value.toUpperCase() })}
+            onInput={(event) =>
+              onChange({
+                base: (event.target as HTMLInputElement).value.toUpperCase(),
+              })
+            }
             className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-amber-400"
             placeholder="基准币种 USD"
           />
           <input
             value={target}
             onInput={(event) =>
-              onChange({ target: (event.target as HTMLInputElement).value.toUpperCase() })
+              onChange({
+                target: (event.target as HTMLInputElement).value.toUpperCase(),
+              })
             }
             className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-amber-400"
             placeholder="目标币种 CNY"
@@ -39,12 +45,16 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
           <input
             value={amount}
             type="number"
-            onInput={(event) => onChange({ amount: Number((event.target as HTMLInputElement).value) })}
+            onInput={(event) =>
+              onChange({
+                amount: Number((event.target as HTMLInputElement).value),
+              })
+            }
             className="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-2 text-sm text-slate-100 outline-none focus:border-amber-400"
             placeholder="金额"
           />
         </div>
-        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-6">
+        <div className="mt-6 rounded-3xl border border-white/10 bg-slate-950/60 p-2">
           {fx.loading ? (
             <p className="text-sm text-slate-300">加载中...</p>
           ) : fx.error ? (
@@ -56,7 +66,9 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
                 <p className="mt-2 text-2xl font-semibold text-white">
                   1 {fx.base} = {formatNumber(fx.rate, 4)} {fx.target}
                 </p>
-                <p className="mt-2 text-sm text-slate-300">更新日期：{fx.date ?? "--"}</p>
+                <p className="mt-2 text-sm text-slate-300">
+                  更新日期：{fx.date ?? "--"}
+                </p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-xs text-slate-400">换算结果</div>
@@ -68,7 +80,7 @@ export function FxPage({ fx, base, target, amount, onChange }: FxPageProps) {
           )}
         </div>
       </div>
-      <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+      <div className="rounded-3xl border border-white/10 bg-white/5 p-2">
         <h3 className="text-lg font-semibold text-white">提示</h3>
         <ul className="mt-4 space-y-3 text-sm text-slate-300">
           <li>汇率数据来自 Frankfurter API（基于欧洲央行）。</li>
