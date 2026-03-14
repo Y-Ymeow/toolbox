@@ -10,6 +10,7 @@ export const mapHashToRoute = (hash: string): ToolKey => {
   if (hash.startsWith("#/timer")) return "timer";
   if (hash.startsWith("#/notes")) return "notes";
   if (hash.startsWith("#/rss")) return "rss";
+  if (hash.startsWith("#/request")) return "request";
   return "home";
 };
 

@@ -26,6 +26,9 @@ import type { NoteItem } from "./tools/notes/types";
 import { rssCard, buildRssBoard } from "./tools/rss/data";
 import { RssPage } from "./tools/rss/detail";
 import type { RssFeed } from "./tools/rss/types";
+import { requestCard, buildRequestBoard } from "./tools/request/data";
+import { RequestPage } from "./tools/request/detail";
+import type { RequestHistoryItem } from "./tools/request/types";
 
 type HomeBoard = {
   key: ToolCard["key"];
@@ -182,16 +185,18 @@ export function App() {
   const [notes, setNotes] = useLocalStorageState<NoteItem[]>("toolbox.notes", []);
   const [rssFeeds, setRssFeeds] = useLocalStorageState<RssFeed[]>("toolbox.rssFeeds", []);
   const [rssSelected, setRssSelected] = useLocalStorageState<string>("toolbox.rssSelected", "");
+  const [requestHistory, setRequestHistory] = useLocalStorageState<RequestHistoryItem[]>("toolbox.requestHistory", []);
 
-  const weather = useWeather(city);
-  const fx = useFx(fxBase, fxTarget, fxAmount);
+  // 只在详情页才启用数据加载
+  const weather = useWeather(city, route === "weather");
+  const fx = useFx(fxBase, fxTarget, fxAmount, route === "fx");
   const resolvedNewsFeed = useMemo(() => {
     const matched = newsFeeds.find((item) => item.url === newsFeed.url);
     return matched ?? newsFeeds[0];
   }, [newsFeed]);
-  const news = useNews(resolvedNewsFeed);
+  const news = useNews(resolvedNewsFeed, route === "news");
 
-  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard, notesCard, rssCard];
+  const toolCards = [calcCard, weatherCard, fxCard, newsCard, timerCard, notesCard, rssCard, requestCard];
   const boards: HomeBoard[] = [
     { key: "calc", data: buildCalcBoard(expression, calcResult) },
     { key: "weather", data: buildWeatherBoard(weather) },
@@ -199,7 +204,8 @@ export function App() {
     { key: "news", data: buildNewsBoard(news) },
     { key: "timer", data: buildTimerBoard(timers, now) },
     { key: "notes", data: buildNotesBoard(notes) },
-    { key: "rss", data: buildRssBoard(rssFeeds, rssFeeds.find((feed) => feed.id === rssSelected)) }
+    { key: "rss", data: buildRssBoard(rssFeeds, rssFeeds.find((feed) => feed.id === rssSelected)) },
+    { key: "request", data: buildRequestBoard(requestHistory) }
   ];
 
   const page = useMemo(() => {
@@ -270,6 +276,13 @@ export function App() {
             onSelect={(id) => setRssSelected(id ?? "")}
           />
         );
+      case "request":
+        return (
+          <RequestPage
+            history={requestHistory}
+            onChange={setRequestHistory}
+          />
+        );
       default:
         return <HomePage toolCards={toolCards} boards={boards} />;
     }
@@ -290,6 +303,7 @@ export function App() {
     notes,
     rssFeeds,
     rssSelected,
+    requestHistory,
     now,
     toolCards,
     boards

@@ -80,15 +80,25 @@ const extractFirstImage = (html: string) => {
   return doc.querySelector("img")?.getAttribute("src") || undefined;
 };
 
-export function useNews(feed: NewsFeed) {
+export function useNews(feed: NewsFeed, enabled = true) {
   const [state, setState] = useState<NewsState>({
-    loading: true,
+    loading: false,
     feedName: feed.label,
     feedType: feed.type,
     items: [],
   });
 
   useEffect(() => {
+    if (!enabled) {
+      setState({
+        loading: false,
+        feedName: feed.label,
+        feedType: feed.type,
+        items: [],
+      });
+      return;
+    }
+
     let active = true;
     let objectUrl: string | undefined;
     const load = async () => {
@@ -194,7 +204,7 @@ export function useNews(feed: NewsFeed) {
       active = false;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
-  }, [feed]);
+  }, [feed, enabled]);
 
   return state;
 }

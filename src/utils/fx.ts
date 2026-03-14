@@ -10,15 +10,20 @@ export type FxState = {
   date?: string;
 };
 
-export function useFx(base: string, target: string, amount: number) {
+export function useFx(base: string, target: string, amount: number, enabled = true) {
   const [state, setState] = useState<FxState>({
-    loading: true,
+    loading: false,
     base,
     target,
     amount
   });
 
   useEffect(() => {
+    if (!enabled) {
+      setState((prev) => ({ ...prev, loading: false }));
+      return;
+    }
+
     let active = true;
     const load = async () => {
       setState((prev) => ({ ...prev, loading: true, error: undefined }));
@@ -53,7 +58,7 @@ export function useFx(base: string, target: string, amount: number) {
     return () => {
       active = false;
     };
-  }, [base, target, amount]);
+  }, [base, target, amount, enabled]);
 
   return state;
 }

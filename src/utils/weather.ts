@@ -45,10 +45,15 @@ export const weatherCodeText: Record<number, string> = {
   99: "雷暴伴强冰雹"
 };
 
-export function useWeather(city: string) {
-  const [state, setState] = useState<WeatherState>({ loading: true });
+export function useWeather(city: string, enabled = true) {
+  const [state, setState] = useState<WeatherState>({ loading: false });
 
   useEffect(() => {
+    if (!enabled) {
+      setState({ loading: false });
+      return;
+    }
+
     let active = true;
     const load = async () => {
       setState({ loading: true });
@@ -93,7 +98,7 @@ export function useWeather(city: string) {
     return () => {
       active = false;
     };
-  }, [city]);
+  }, [city, enabled]);
 
   return state;
 }

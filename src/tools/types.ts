@@ -1,4 +1,4 @@
-export type ToolKey = "home" | "weather" | "fx" | "news" | "timer" | "calc" | "notes" | "rss";
+export type ToolKey = "home" | "weather" | "fx" | "news" | "timer" | "calc" | "notes" | "rss" | "request";
 
 export type ToolCard = {
   key: ToolKey;
