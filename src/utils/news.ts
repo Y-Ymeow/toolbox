@@ -104,13 +104,13 @@ export function useNews(feed: NewsFeed) {
         let parsed: NewsItem[] = [];
 
         if (feed.type === "image") {
-          const blob = await resp.blob();
-          objectUrl = URL.createObjectURL(blob);
+          const image = new Image();
+          image.src = feed.url;
           parsed = [
             {
               title: feed.label,
               link: feed.url,
-              image: objectUrl,
+              image: feed.url,
             },
           ];
         } else if (feed.type === "rss") {
